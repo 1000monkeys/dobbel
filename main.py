@@ -45,10 +45,10 @@ def handle_rolls(rolls):
     if six_count > 2:
         print("You rolled three sixes!!! YAY!")
 
-
     bottom_value = 0
     string = ""
     print("Bottom of the dice shows: ")
+
     for roll in rolls:
         temp = (7 - roll)
         bottom_value += temp
@@ -70,19 +70,24 @@ def rolling_dice(amount_of_dice):
     while i < 5:
         string = ""
         j = 0
+
         while j < amount_of_dice:
             string += "[" + str(random.randint(1, 6)) + "]"
             j += 1
+
         print(string)
         time.sleep(0.5)
         i += 1
+
     i = 0
     string = ""
     rolls = []
+
     while i < amount_of_dice:
         rolls.append(random.randint(1, 6))
         string += "[" + str(rolls[i]) + "]"
         i += 1
+
     print("################# Your result:")
     print(string)
     return rolls
