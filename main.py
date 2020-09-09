@@ -7,7 +7,7 @@ def handle_dice_input():
     Ask's for input on how many dice you want.
     If you input Q it will exit the program
     if your input is 3/4/5 it will return your input to the caller.
-    if it is not 3/4/5 it displays a message on what you can input and restarts the funcion
+    if it is not 3/4/5 it displays a message on what you can input and restarts the function
     :return 3/4/5 as in how many dice.
     """
     amount = input("How many dice? 3 4 or 5? Input q to quit ")
