@@ -11,59 +11,40 @@ def handle_dice_input():
     if it is not 3/4/5 it displays a message on what you can input and restarts the function
     :return 3/4/5 as in how many dice.
     """
-    amount = input("How many dice? 3 4 or 5? Input q or Q to quit ")
-
-    if amount[0].upper() == "Q":
+    amount = input("Input q or Q to quit, Disregards all other input.\nHow many dice? 3 4 or 5? >")
+    if amount[0].upper() == "Q":  # Only really need the first character
         exit()
-
-    amount = int(amount[0])
-    if amount == 3 or amount == 4 or amount == 5:
-        return amount
+    elif int(amount[0]) == 3 or 4 or 5:
+        return int(amount)
     else:
         print("Input three, four, five or Q to quit!")
         return handle_dice_input()
 
 
-def handle_rolls(rolls):
+def handle_results(results):
     """
     does some post roll work on the results of the rolls
-    shows totol value of rolls
+    shows your results together and on a new line the ttoal value of results
     checks for triple sixes in rolls
-    shows bottom of dice for rolls
+    shows bottom of dice for rolls and total value of bottom rolls
     :param rolls: the rolls to process
     """
 
-    # Build the string of the result
-    print("################# Your result:")
-    i = 0
-    string = ""
-    while i < len(rolls):
-        string += "[" + str(rolls[i]) + "]"
+    i, value, string = 0, 0, str()  # var i for count and value for total value from results
+    while i < len(results):
+        value += results[i]
+        string += "[" + str(results[i]) + "]"
         i += 1
-    print(string)
+    print("################# Your result:\n" + string + "\nTotal value of rolls is: " + str(value))
 
-    value = 0
-    for roll in rolls:
-        value += roll
-    print("Total value of rolls is: " + str(value))
-
-    six_count = 0
-    for roll in rolls:
-        if roll == 6:
-            six_count += 1
-    if six_count > 2:
+    if results.count(6) > 2:
         print("You rolled three sixes!!! YAY!")
 
-    print("Bottom of the dice shows: ")
-    string = ""
-    bottom_value = 0
-    for roll in rolls:
-        temp = (7 - roll)
-        bottom_value += temp
-        string += "[" + str(temp) + "]"
-    print(string)
-
-    print("Total value of bottomside rolls is: " + str(bottom_value))
+    string, bottom_value = "", 0
+    for result in results:
+        bottom_value += (7 - result)
+        string += "[" + str(7 - result) + "]"
+    print("Bottom of the dice shows:\n" + string + "\nTotal value of bottom side rolls is: " + str(bottom_value))
 
 
 def rolling_dice(amount_of_dice):
@@ -76,31 +57,25 @@ def rolling_dice(amount_of_dice):
 
     print("################# Rolling!")
     # variable i only serves as a cap for amount of non result dice rolls
-    i = 0
-    rolls = []
-    while len(rolls) < amount_of_dice:
-        # loop as long as we do not have enough rolls in the result array compared to amount of dice
+    i, results = 0, []
+    while len(results) < amount_of_dice:  # loop as long as we do not have enough rolls in the result array
         roll = random.randint(1, 6)
         string = "[" + str(roll) + "]"
 
-        if random.randint(0, 4) == 2 or i > 8:
-            rolls.append(roll)
+        if random.randint(0, 4) == 2 or i > 9:
+            results.append(roll)
             string += " RESULT = " + string + " !!\n"
-            # Result so send new line signal to continue rolling(maybe) on the next pass
             i = 0
 
         sys.stdout.write(string)
-
-        time.sleep(0.25) # Sleep to simulate natural dice throwing
+        time.sleep(0.25)  # Sleep to simulate natural dice throwing
         i += 1
 
-    return rolls
+    return results
 
 
 if __name__ == "__main__":
     print("Welcome to Kjell's crazy dice game!!")
 
     while True:
-        amount = handle_dice_input()
-        rolls = rolling_dice(amount)
-        handle_rolls(rolls)
+        handle_results(rolling_dice(handle_dice_input()))
