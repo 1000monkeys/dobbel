@@ -1,3 +1,4 @@
+import sys
 import time
 import random
 
@@ -10,7 +11,7 @@ def handle_dice_input():
     if it is not 3/4/5 it displays a message on what you can input and restarts the function
     :return 3/4/5 as in how many dice.
     """
-    amount = input("How many dice? 3 4 or 5? Input q to quit ")
+    amount = input("How many dice? 3 4 or 5? Input q or Q to quit ")
 
     if amount[0].upper() == "Q":
         exit()
@@ -31,30 +32,37 @@ def handle_rolls(rolls):
     shows bottom of dice for rolls
     :param rolls: the rolls to process
     """
+
+    # Build the string of the result
+    print("################# Your result:")
+    i = 0
+    string = ""
+    while i < len(rolls):
+        string += "[" + str(rolls[i]) + "]"
+        i += 1
+    print(string)
+
     value = 0
     for roll in rolls:
         value += roll
-
     print("Total value of rolls is: " + str(value))
 
     six_count = 0
     for roll in rolls:
         if roll == 6:
             six_count += 1
-
     if six_count > 2:
         print("You rolled three sixes!!! YAY!")
 
-    bottom_value = 0
-    string = ""
     print("Bottom of the dice shows: ")
-
+    string = ""
+    bottom_value = 0
     for roll in rolls:
         temp = (7 - roll)
         bottom_value += temp
         string += "[" + str(temp) + "]"
-
     print(string)
+
     print("Total value of bottomside rolls is: " + str(bottom_value))
 
 
@@ -65,31 +73,27 @@ def rolling_dice(amount_of_dice):
     :param amount_of_dice: amount of rolls to put into the list
     :return: rolls in a list
     """
+
     print("################# Rolling!")
+    # variable i only serves as a cap for amount of non result dice rolls
     i = 0
-    while i < 5:
-        string = ""
-        j = 0
-
-        while j < amount_of_dice:
-            string += "[" + str(random.randint(1, 6)) + "]"
-            j += 1
-
-        print(string)
-        time.sleep(0.5)
-        i += 1
-
-    i = 0
-    string = ""
     rolls = []
+    while len(rolls) < amount_of_dice:
+        # loop as long as we do not have enough rolls in the result array compared to amount of dice
+        roll = random.randint(1, 6)
+        string = "[" + str(roll) + "]"
 
-    while i < amount_of_dice:
-        rolls.append(random.randint(1, 6))
-        string += "[" + str(rolls[i]) + "]"
+        if random.randint(0, 4) == 2 or i > 8:
+            rolls.append(roll)
+            string += " RESULT = " + string + " !!\n"
+            # Result so send new line signal to continue rolling(maybe) on the next pass
+            i = 0
+
+        sys.stdout.write(string)
+
+        time.sleep(0.25) # Sleep to simulate natural dice throwing
         i += 1
 
-    print("################# Your result:")
-    print(string)
     return rolls
 
 
